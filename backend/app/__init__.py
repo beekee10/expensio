@@ -1,0 +1,1 @@
+"""Zenith Finance Backend Application."""
