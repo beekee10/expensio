@@ -1,85 +1,74 @@
 import React from 'react';
-import { Utensils, Zap, Film, RefreshCw, Layers, CheckCircle2 } from 'lucide-react';
+import { Utensils, Zap, Film, RefreshCw, Layers, CheckCircle } from 'lucide-react';
 
-const categoryConfig = {
-  Food: { icon: Utensils, color: '#06b6d4' },
-  Utilities: { icon: Zap, color: '#6366f1' },
-  Entertainment: { icon: Film, color: '#8b5cf6' },
-  Subscriptions: { icon: RefreshCw, color: '#f59e0b' },
-  Other: { icon: Layers, color: '#94a3b8' }
+const categoryIcons = {
+  Food: Utensils,
+  Utilities: Zap,
+  Entertainment: Film,
+  Subscriptions: RefreshCw,
+  Other: Layers
+};
+
+const categoryColors = {
+  Food: 'bg-teal-500',
+  Utilities: 'bg-indigo-500',
+  Entertainment: 'bg-purple-500',
+  Subscriptions: 'bg-amber-500',
+  Other: 'bg-slate-500'
 };
 
 export default function CategoryBreakdown({ categories, summary }) {
   const monthlySpent = summary?.monthly_spent ?? 0;
-  const monthlyBudget = summary?.monthly_budget ?? 2000;
-  const savingsProgress = Math.max(0, Math.min(100, Math.round(((monthlyBudget - monthlySpent) / monthlyBudget) * 100)));
+  const monthlyBudget = summary?.monthly_budget ?? 25000;
+  
+  // Percentage of budget remaining
+  const budgetLeftPercent = Math.max(0, Math.min(100, Math.round(((monthlyBudget - monthlySpent) / monthlyBudget) * 100)));
 
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-      gap: '20px',
-      marginBottom: '28px'
-    }}>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
       
-      {/* Spending by Category Card */}
-      <div className="glass-card">
-        <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '20px' }}>
+      {/* 1. Category Spending Progress Bars */}
+      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-lg">
+        <h3 className="text-lg font-bold text-white mb-4">
           Spending by Category
         </h3>
 
         {(!categories || categories.length === 0) ? (
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', fontStyle: 'italic' }}>
-            No expense data yet. Click "+ Add Expense" to begin tracking.
+          <p className="text-sm text-slate-500 italic py-6">
+            No expenses found yet. Click "+ Add Expense" to record one!
           </p>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div className="space-y-4">
             {categories.map((cat) => {
-              const config = categoryConfig[cat.category] || categoryConfig.Other;
-              const Icon = config.icon;
+              const Icon = categoryIcons[cat.category] || Layers;
+              const barColor = categoryColors[cat.category] || 'bg-slate-500';
 
               return (
-                <div key={cat.category}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div style={{
-                        padding: '6px',
-                        borderRadius: '8px',
-                        background: `${config.color}20`,
-                        color: config.color,
-                        display: 'flex',
-                        alignItems: 'center'
-                      }}>
-                        <Icon size={16} />
+                <div key={cat.category} className="space-y-1.5">
+                  <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-slate-800 text-slate-300">
+                        <Icon className="w-4 h-4" />
                       </div>
-                      <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>{cat.category}</span>
+                      <span className="font-semibold text-slate-200">{cat.category}</span>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ fontSize: '0.9rem', fontWeight: 700 }}>
-                        ${cat.total_amount.toFixed(2)}
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-white">
+                        ₹{cat.total_amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                       </span>
-                      <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                        {cat.percentage}%
+                      <span className="text-xs text-slate-400">
+                        ({cat.percentage}%)
                       </span>
                     </div>
                   </div>
 
-                  {/* Progress Bar */}
-                  <div style={{
-                    width: '100%',
-                    height: '6px',
-                    borderRadius: '4px',
-                    background: 'rgba(255, 255, 255, 0.06)',
-                    overflow: 'hidden'
-                  }}>
-                    <div style={{
-                      width: `${Math.min(100, cat.percentage)}%`,
-                      height: '100%',
-                      background: config.color,
-                      borderRadius: '4px',
-                      transition: 'width 0.4s ease-out'
-                    }} />
+                  {/* Tailwind Progress Bar */}
+                  <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-300 ${barColor}`}
+                      style={{ width: `${Math.min(100, cat.percentage)}%` }}
+                    />
                   </div>
                 </div>
               );
@@ -88,67 +77,32 @@ export default function CategoryBreakdown({ categories, summary }) {
         )}
       </div>
 
-      {/* Monthly Budget & Savings Progress Meter Card */}
-      <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      {/* 2. Monthly Budget Health */}
+      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-lg flex flex-col justify-between">
         <div>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '6px' }}>
-            Monthly Budget Health
-          </h3>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '24px' }}>
-            Remaining discretionary spending buffer for current month
+          <h3 className="text-lg font-bold text-white">Monthly Budget Health</h3>
+          <p className="text-xs text-slate-400 mt-1">
+            Tracking your monthly spending limit of ₹{monthlyBudget.toLocaleString('en-IN')}
           </p>
 
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '20px 0'
-          }}>
-            <div style={{
-              width: '160px',
-              height: '160px',
-              borderRadius: '50%',
-              background: `conic-gradient(var(--accent-cyan) ${savingsProgress * 3.6}deg, rgba(255, 255, 255, 0.06) 0deg)`,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 0 30px rgba(6, 182, 212, 0.15)'
-            }}>
-              <div style={{
-                width: '130px',
-                height: '130px',
-                borderRadius: '50%',
-                background: '#131c2e',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                textAlign: 'center'
-              }}>
-                <span style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)' }}>
-                  {savingsProgress}%
-                </span>
-                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  Buffer Left
-                </span>
-              </div>
+          {/* Simple Circle / Metric Display */}
+          <div className="flex flex-col items-center justify-center my-6">
+            <div className="w-36 h-36 rounded-full border-4 border-slate-800 border-t-teal-400 flex flex-col items-center justify-center bg-slate-950/60 shadow-inner">
+              <span className="text-3xl font-extrabold text-white">
+                {budgetLeftPercent}%
+              </span>
+              <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mt-0.5">
+                Remaining
+              </span>
             </div>
           </div>
         </div>
 
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          padding: '12px 16px',
-          borderRadius: '10px',
-          background: 'rgba(255, 255, 255, 0.03)',
-          border: '1px solid var(--card-border)'
-        }}>
-          <CheckCircle2 size={18} color="var(--accent-emerald)" />
-          <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-            Spent <strong>${monthlySpent}</strong> out of your <strong>${monthlyBudget}</strong> monthly target.
+        <div className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/40 text-xs text-slate-300">
+          <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
+          <span>
+            You have spent <strong className="text-white">₹{monthlySpent.toLocaleString('en-IN')}</strong> of your{' '}
+            <strong className="text-white">₹{monthlyBudget.toLocaleString('en-IN')}</strong> monthly limit.
           </span>
         </div>
       </div>

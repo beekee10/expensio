@@ -1,139 +1,82 @@
 import React from 'react';
-import { ArrowUpRight, ArrowDownRight, Wallet, CreditCard, PiggyBank } from 'lucide-react';
+import { Wallet, CreditCard, PiggyBank, ArrowUpRight } from 'lucide-react';
 
 export default function StatsCards({ summary }) {
   const totalSpent = summary?.total_spent ?? 0;
   const monthlySpent = summary?.monthly_spent ?? 0;
   const budgetRemaining = summary?.budget_remaining ?? 0;
-  const monthlyBudget = summary?.monthly_budget ?? 2000;
+  const monthlyBudget = summary?.monthly_budget ?? 25000;
 
-  const budgetUsagePercent = Math.min(100, Math.round((monthlySpent / monthlyBudget) * 100));
+  // Percentage of budget used
+  const budgetPercentage = Math.min(100, Math.round((monthlySpent / monthlyBudget) * 100));
 
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-      gap: '20px',
-      margin: '28px 0'
-    }}>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
       
-      {/* Total Balance / All-time Card */}
-      <div className="glass-card" style={{ position: 'relative', overflow: 'hidden' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+      {/* 1. All-time Total Spent */}
+      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-lg backdrop-blur-sm">
+        <div className="flex items-center justify-between">
           <div>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
-              All-Time Spending
-            </span>
-            <h2 style={{ fontSize: '2rem', fontWeight: 800, margin: '8px 0 0 0', letterSpacing: '-0.03em' }}>
-              ${totalSpent.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            <p className="text-sm font-medium text-slate-400">Total Spending (All-Time)</p>
+            <h2 className="text-3xl font-extrabold text-white mt-2">
+              ₹{totalSpent.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </h2>
           </div>
-          <div style={{
-            padding: '10px',
-            borderRadius: '12px',
-            background: 'rgba(6, 182, 212, 0.12)',
-            color: 'var(--accent-cyan)'
-          }}>
-            <Wallet size={22} />
+          <div className="p-3 bg-teal-500/10 text-teal-400 rounded-xl">
+            <Wallet className="w-6 h-6" />
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '16px' }}>
-          <span style={{
-            fontSize: '0.75rem',
-            padding: '2px 8px',
-            borderRadius: '12px',
-            background: 'rgba(16, 185, 129, 0.12)',
-            color: 'var(--accent-emerald)',
-            fontWeight: 700,
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '2px'
-          }}>
-            <ArrowUpRight size={14} /> Active
+        <div className="flex items-center gap-2 mt-4 text-xs text-slate-400">
+          <span className="flex items-center text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full font-semibold">
+            <ArrowUpRight className="w-3.5 h-3.5 mr-0.5" /> Tracked
           </span>
-          <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-            Tracked across {summary?.transaction_count ?? 0} transactions
-          </span>
+          <span>{summary?.transaction_count ?? 0} total transactions</span>
         </div>
       </div>
 
-      {/* Monthly Spending Card */}
-      <div className="glass-card">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+      {/* 2. Monthly Spending */}
+      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-lg backdrop-blur-sm">
+        <div className="flex items-center justify-between">
           <div>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
-              This Month's Spending
-            </span>
-            <h2 style={{ fontSize: '2rem', fontWeight: 800, margin: '8px 0 0 0', letterSpacing: '-0.03em' }}>
-              ${monthlySpent.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            <p className="text-sm font-medium text-slate-400">This Month's Spending</p>
+            <h2 className="text-3xl font-extrabold text-white mt-2">
+              ₹{monthlySpent.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </h2>
           </div>
-          <div style={{
-            padding: '10px',
-            borderRadius: '12px',
-            background: 'rgba(99, 102, 241, 0.12)',
-            color: 'var(--accent-indigo)'
-          }}>
-            <CreditCard size={22} />
+          <div className="p-3 bg-indigo-500/10 text-indigo-400 rounded-xl">
+            <CreditCard className="w-6 h-6" />
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '16px' }}>
-          <span style={{
-            fontSize: '0.75rem',
-            padding: '2px 8px',
-            borderRadius: '12px',
-            background: budgetUsagePercent > 80 ? 'rgba(244, 63, 94, 0.12)' : 'rgba(6, 182, 212, 0.12)',
-            color: budgetUsagePercent > 80 ? 'var(--accent-rose)' : 'var(--accent-cyan)',
-            fontWeight: 700
-          }}>
-            {budgetUsagePercent}% of budget
+        <div className="flex items-center gap-2 mt-4 text-xs text-slate-400">
+          <span className={`px-2 py-0.5 rounded-full font-semibold ${
+            budgetPercentage > 85 ? 'text-rose-400 bg-rose-500/10' : 'text-teal-400 bg-teal-500/10'
+          }`}>
+            {budgetPercentage}% of budget
           </span>
-          <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-            Target: ${monthlyBudget}
-          </span>
+          <span>Target: ₹{monthlyBudget.toLocaleString('en-IN')}</span>
         </div>
       </div>
 
-      {/* Remaining Budget Card */}
-      <div className="glass-card">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+      {/* 3. Remaining Budget */}
+      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-lg backdrop-blur-sm">
+        <div className="flex items-center justify-between">
           <div>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
-              Remaining Budget
-            </span>
-            <h2 style={{ 
-              fontSize: '2rem', 
-              fontWeight: 800, 
-              margin: '8px 0 0 0', 
-              letterSpacing: '-0.03em',
-              color: budgetRemaining < 200 ? 'var(--accent-rose)' : 'var(--accent-emerald)'
-            }}>
-              ${budgetRemaining.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            <p className="text-sm font-medium text-slate-400">Remaining Budget</p>
+            <h2 className={`text-3xl font-extrabold mt-2 ${
+              budgetRemaining < 5000 ? 'text-rose-400' : 'text-emerald-400'
+            }`}>
+              ₹{budgetRemaining.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </h2>
           </div>
-          <div style={{
-            padding: '10px',
-            borderRadius: '12px',
-            background: 'rgba(16, 185, 129, 0.12)',
-            color: 'var(--accent-emerald)'
-          }}>
-            <PiggyBank size={22} />
+          <div className="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl">
+            <PiggyBank className="w-6 h-6" />
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '16px' }}>
-          <span style={{
-            fontSize: '0.75rem',
-            padding: '2px 8px',
-            borderRadius: '12px',
-            background: 'rgba(255, 255, 255, 0.06)',
-            color: 'var(--text-secondary)',
-            fontWeight: 700
-          }}>
+        <div className="flex items-center gap-2 mt-4 text-xs text-slate-400">
+          <span className="text-slate-300 bg-slate-800 px-2 py-0.5 rounded-full font-semibold">
             Safe to spend
           </span>
-          <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-            Resetting in next billing cycle
-          </span>
+          <span>Current calendar month</span>
         </div>
       </div>
 

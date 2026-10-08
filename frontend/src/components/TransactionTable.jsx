@@ -1,6 +1,14 @@
 import React from 'react';
 import { Search, Filter, Trash2, Edit2 } from 'lucide-react';
 
+const categoryBadges = {
+  Food: 'bg-teal-500/10 text-teal-400 border-teal-500/20',
+  Utilities: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20',
+  Entertainment: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+  Subscriptions: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  Other: 'bg-slate-700/30 text-slate-300 border-slate-700'
+};
+
 export default function TransactionTable({
   expenses,
   searchTerm,
@@ -12,150 +20,114 @@ export default function TransactionTable({
 }) {
   const categories = ['All', 'Food', 'Utilities', 'Entertainment', 'Subscriptions', 'Other'];
 
-  const getBadgeClass = (category) => {
-    switch (category?.toLowerCase()) {
-      case 'food': return 'badge badge-food';
-      case 'utilities': return 'badge badge-utilities';
-      case 'entertainment': return 'badge badge-entertainment';
-      case 'subscriptions': return 'badge badge-subscriptions';
-      default: return 'badge badge-other';
-    }
-  };
-
   return (
-    <div className="glass-card" style={{ marginBottom: '40px' }}>
+    <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-lg mb-10">
       
-      {/* Table Header & Controls */}
-      <div style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '16px',
-        marginBottom: '20px'
-      }}>
-        <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: 0 }}>
-          Recent Transactions
-        </h3>
+      {/* Search & Filter Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <h3 className="text-lg font-bold text-white">Recent Transactions</h3>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-          {/* Search Box */}
-          <div style={{ position: 'relative', minWidth: '220px' }}>
-            <Search size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Search Bar */}
+          <div className="relative min-w-[200px]">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              className="form-input"
               placeholder="Search expenses..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ paddingLeft: '36px', height: '38px' }}
+              className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-9 pr-3 py-1.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-teal-500"
             />
           </div>
 
-          {/* Category Filter */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Filter size={16} color="var(--text-muted)" />
+          {/* Category Dropdown */}
+          <div className="flex items-center gap-1.5 bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5">
+            <Filter className="w-3.5 h-3.5 text-slate-400" />
             <select
-              className="form-select"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              style={{ height: '38px', minWidth: '130px' }}
+              className="bg-transparent text-sm text-slate-200 focus:outline-none cursor-pointer"
             >
-              {categories.map((c) => (
-                <option key={c} value={c}>{c}</option>
+              {categories.map((cat) => (
+                <option key={cat} value={cat} className="bg-slate-800 text-white">
+                  {cat}
+                </option>
               ))}
             </select>
           </div>
         </div>
       </div>
 
-      {/* Table Content */}
+      {/* Transactions Table */}
       {(!expenses || expenses.length === 0) ? (
-        <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text-muted)' }}>
-          <p style={{ fontSize: '0.95rem' }}>No transactions found matching your criteria.</p>
+        <div className="text-center py-10 text-slate-500 text-sm italic">
+          No transactions found.
         </div>
       ) : (
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
             <thead>
-              <tr style={{ borderBottom: '1px solid var(--card-border)', color: 'var(--text-muted)', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                <th style={{ padding: '12px 16px' }}>Date</th>
-                <th style={{ padding: '12px 16px' }}>Category</th>
-                <th style={{ padding: '12px 16px' }}>Description</th>
-                <th style={{ padding: '12px 16px', textAlign: 'right' }}>Amount</th>
-                <th style={{ padding: '12px 16px', textAlign: 'center' }}>Actions</th>
+              <tr className="border-b border-slate-800 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <th className="py-3 px-4">Date</th>
+                <th className="py-3 px-4">Category</th>
+                <th className="py-3 px-4">Description</th>
+                <th className="py-3 px-4 text-right">Amount</th>
+                <th className="py-3 px-4 text-center">Actions</th>
               </tr>
             </thead>
-            <tbody>
-              {expenses.map((item) => (
-                <tr 
-                  key={item.id} 
-                  style={{
-                    borderBottom: '1px solid rgba(255, 255, 255, 0.04)',
-                    transition: 'background 0.15s ease'
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)'}
-                  onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-                >
-                  <td style={{ padding: '14px 16px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                    {item.date}
-                  </td>
-                  <td style={{ padding: '14px 16px' }}>
-                    <span className={getBadgeClass(item.category)}>
-                      {item.category}
-                    </span>
-                  </td>
-                  <td style={{ padding: '14px 16px', fontWeight: 600 }}>
-                    <div>{item.title}</div>
-                    {item.notes && (
-                      <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 400 }}>
-                        {item.notes}
+            <tbody className="divide-y divide-slate-800/60">
+              {expenses.map((item) => {
+                const badgeStyle = categoryBadges[item.category] || categoryBadges.Other;
+
+                return (
+                  <tr key={item.id} className="hover:bg-slate-800/30 transition-colors">
+                    {/* Date */}
+                    <td className="py-3.5 px-4 text-slate-400 whitespace-nowrap">
+                      {item.date}
+                    </td>
+
+                    {/* Category */}
+                    <td className="py-3.5 px-4">
+                      <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-medium border ${badgeStyle}`}>
+                        {item.category}
                       </span>
-                    )}
-                  </td>
-                  <td style={{ padding: '14px 16px', textAlign: 'right', fontWeight: 700, color: 'var(--accent-rose)' }}>
-                    -${item.amount.toFixed(2)}
-                  </td>
-                  <td style={{ padding: '14px 16px', textAlign: 'center' }}>
-                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                      <button
-                        onClick={() => onEdit(item)}
-                        title="Edit expense"
-                        style={{
-                          background: 'transparent',
-                          border: 'none',
-                          color: 'var(--text-muted)',
-                          cursor: 'pointer',
-                          padding: '6px',
-                          borderRadius: '6px',
-                          transition: 'color 0.15s'
-                        }}
-                        onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent-cyan)'}
-                        onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
-                      >
-                        <Edit2 size={16} />
-                      </button>
-                      <button
-                        onClick={() => onDelete(item.id)}
-                        title="Delete expense"
-                        style={{
-                          background: 'transparent',
-                          border: 'none',
-                          color: 'var(--text-muted)',
-                          cursor: 'pointer',
-                          padding: '6px',
-                          borderRadius: '6px',
-                          transition: 'color 0.15s'
-                        }}
-                        onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent-rose)'}
-                        onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+
+                    {/* Title & Notes */}
+                    <td className="py-3.5 px-4">
+                      <div className="font-medium text-slate-100">{item.title}</div>
+                      {item.notes && (
+                        <div className="text-xs text-slate-500">{item.notes}</div>
+                      )}
+                    </td>
+
+                    {/* Amount in Rupees */}
+                    <td className="py-3.5 px-4 text-right font-bold text-rose-400 whitespace-nowrap">
+                      -₹{item.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                    </td>
+
+                    {/* Action buttons */}
+                    <td className="py-3.5 px-4 text-center">
+                      <div className="inline-flex items-center gap-2">
+                        <button
+                          onClick={() => onEdit(item)}
+                          title="Edit"
+                          className="p-1.5 text-slate-400 hover:text-teal-400 rounded-md transition-colors"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => onDelete(item.id)}
+                          title="Delete"
+                          className="p-1.5 text-slate-400 hover:text-rose-400 rounded-md transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

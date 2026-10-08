@@ -1,101 +1,62 @@
 import React from 'react';
-import { Plus, LogOut, TrendingUp, ShieldCheck } from 'lucide-react';
+import { Plus, LogOut, TrendingUp } from 'lucide-react';
 
 export default function Navbar({ user, onAddExpense, onLogout, onOpenAuth }) {
   return (
-    <header style={{
-      borderBottom: '1px solid var(--card-border)',
-      background: 'rgba(11, 15, 25, 0.8)',
-      backdropFilter: 'blur(12px)',
-      position: 'sticky',
-      top: 0,
-      zIndex: 50,
-      padding: '16px 0'
-    }}>
-      <div className="app-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <header className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         
-        {/* Brand */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{
-            width: '38px',
-            height: '38px',
-            borderRadius: '10px',
-            background: 'var(--gradient-brand)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: 'var(--glow-cyan)'
-          }}>
-            <TrendingUp size={20} color="#ffffff" strokeWidth={2.5} />
+        {/* Brand Logo */}
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-teal-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-teal-500/20">
+            <TrendingUp className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h1 style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '-0.02em', margin: 0 }}>
-              Zenith<span style={{ color: 'var(--accent-cyan)' }}>Finance</span>
+            <h1 className="text-xl font-bold tracking-tight text-white leading-none">
+              Zenith<span className="text-teal-400">Finance</span>
             </h1>
-            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 500, letterSpacing: '0.04em' }}>
-              FASTAPI &bull; SQLALCHEMY &bull; REACT
-            </span>
+            <p className="text-xs text-slate-400 font-medium mt-1">
+              Python FastAPI &bull; SQLAlchemy &bull; React
+            </p>
           </div>
         </div>
 
-        {/* Actions / User profile */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        {/* Right Actions */}
+        <div className="flex items-center gap-4">
           {user ? (
             <>
-              <button 
+              {/* Add Expense Button */}
+              <button
                 id="btn-add-expense"
-                className="btn btn-primary" 
                 onClick={onAddExpense}
+                className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-colors shadow-md shadow-teal-500/20"
               >
-                <Plus size={18} strokeWidth={2.5} />
-                Add Expense
+                <Plus className="w-4 h-4" />
+                <span>Add Expense</span>
               </button>
 
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '6px 14px',
-                borderRadius: '30px',
-                background: 'rgba(255, 255, 255, 0.04)',
-                border: '1px solid var(--card-border)'
-              }}>
-                <div style={{
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '50%',
-                  background: 'var(--accent-indigo)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '0.8rem',
-                  fontWeight: 700
-                }}>
-                  {user.full_name ? user.full_name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
+              {/* User Profile */}
+              <div className="flex items-center gap-3 bg-slate-800/80 border border-slate-700/60 rounded-full px-3 py-1.5">
+                <div className="w-7 h-7 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold text-white">
+                  {user.full_name ? user.full_name[0].toUpperCase() : user.email[0].toUpperCase()}
                 </div>
-                <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+                <span className="text-sm font-medium text-slate-200 hidden sm:inline">
                   {user.full_name || user.email.split('@')[0]}
                 </span>
-                <button 
+                <button
                   onClick={onLogout}
-                  title="Sign Out"
-                  style={{
-                    background: 'transparent',
-                    border: 'none',
-                    color: 'var(--text-muted)',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    padding: '4px',
-                    marginLeft: '4px'
-                  }}
+                  title="Logout"
+                  className="text-slate-400 hover:text-rose-400 p-1 transition-colors"
                 >
-                  <LogOut size={16} />
+                  <LogOut className="w-4 h-4" />
                 </button>
               </div>
             </>
           ) : (
-            <button className="btn btn-primary" onClick={onOpenAuth}>
+            <button
+              onClick={onOpenAuth}
+              className="bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm px-5 py-2 rounded-lg transition-colors"
+            >
               Sign In / Register
             </button>
           )}

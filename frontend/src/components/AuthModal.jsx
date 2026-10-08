@@ -36,7 +36,6 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
     setError('');
     setLoading(true);
     try {
-      // Try logging into demo account, or auto-create it if it doesn't exist yet
       try {
         await authService.login('demo@zenith.com', 'password123');
       } catch {
@@ -44,123 +43,98 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
       }
       onAuthSuccess();
       onClose();
-    } catch (err) {
-      setError('Could not connect to backend server. Make sure FastAPI is running on port 8000.');
+    } catch {
+      setError('Could not connect to FastAPI backend on port 8000.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl relative">
         
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
           <div>
-            <h3 style={{ fontSize: '1.3rem', fontWeight: 700, margin: 0 }}>
-              {isRegister ? 'Create an Account' : 'Welcome Back'}
+            <h3 className="text-xl font-bold text-white">
+              {isRegister ? 'Create Account' : 'Welcome Back'}
             </h3>
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', margin: '4px 0 0 0' }}>
-              {isRegister ? 'Sign up to start tracking expenses with Python FastAPI' : 'Sign in to access your financial dashboard'}
+            <p className="text-xs text-slate-400 mt-0.5">
+              {isRegister ? 'Sign up to track expenses with Python FastAPI' : 'Sign in to access your financial dashboard'}
             </p>
           </div>
-          <button
-            onClick={onClose}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: 'var(--text-muted)',
-              cursor: 'pointer',
-              padding: '4px'
-            }}
-          >
-            <X size={20} />
+          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg">
+            <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Demo Account Quick Button */}
-        <button
-          type="button"
-          onClick={handleDemoLogin}
-          disabled={loading}
-          style={{
-            width: '100%',
-            marginBottom: '20px',
-            padding: '12px',
-            borderRadius: 'var(--radius-sm)',
-            background: 'rgba(99, 102, 241, 0.12)',
-            border: '1px solid rgba(99, 102, 241, 0.3)',
-            color: '#a5b4fc',
-            fontWeight: 600,
-            fontSize: '0.88rem',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-            transition: 'all 0.2s'
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(99, 102, 241, 0.2)'}
-          onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(99, 102, 241, 0.12)'}
-        >
-          <Sparkles size={16} /> 1-Click Demo Interviewer Login
-        </button>
+        {/* 1-Click Demo Login Button */}
+        <div className="mt-5">
+          <button
+            type="button"
+            onClick={handleDemoLogin}
+            disabled={loading}
+            className="w-full flex items-center justify-center gap-2 bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 font-semibold text-sm py-2.5 px-4 rounded-xl transition-colors"
+          >
+            <Sparkles className="w-4 h-4" />
+            1-Click Demo Interviewer Login
+          </button>
+        </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-          <div style={{ flex: 1, height: '1px', background: 'var(--card-border)' }} />
-          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>or with credentials</span>
-          <div style={{ flex: 1, height: '1px', background: 'var(--card-border)' }} />
+        <div className="flex items-center gap-3 my-4">
+          <div className="flex-1 h-px bg-slate-800" />
+          <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">or email</span>
+          <div className="flex-1 h-px bg-slate-800" />
         </div>
 
         {error && (
-          <div style={{
-            background: 'rgba(244, 63, 94, 0.1)',
-            border: '1px solid rgba(244, 63, 94, 0.3)',
-            color: 'var(--accent-rose)',
-            padding: '10px 14px',
-            borderRadius: '8px',
-            fontSize: '0.85rem',
-            marginBottom: '16px'
-          }}>
+          <div className="mb-4 p-3 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-lg text-sm">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit}>
+        {/* Auth Form */}
+        <form onSubmit={handleSubmit} className="space-y-4">
           {isRegister && (
-            <div className="form-group">
-              <label className="form-label">Full Name</label>
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Full Name
+              </label>
               <input
                 type="text"
-                className="form-input"
-                placeholder="Jane Doe"
+                placeholder="Rahul Sharma"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
+                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-500"
               />
             </div>
           )}
 
-          <div className="form-group">
-            <label className="form-label">Email Address</label>
+          <div>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Email Address
+            </label>
             <input
               type="email"
-              className="form-input"
-              placeholder="you@example.com"
+              placeholder="rahul@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-500"
               required
             />
           </div>
 
-          <div className="form-group">
-            <label className="form-label">Password</label>
+          <div>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Password
+            </label>
             <input
               type="password"
-              className="form-input"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-500"
               required
               minLength={6}
             />
@@ -168,29 +142,21 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
 
           <button
             type="submit"
-            className="btn btn-primary"
-            style={{ width: '100%', marginTop: '12px', padding: '12px' }}
             disabled={loading}
+            className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm py-2.5 px-4 rounded-xl transition-colors disabled:opacity-50 mt-2"
           >
-            {loading ? 'Please wait...' : (isRegister ? 'Create Account' : 'Sign In')}
+            {loading ? 'Please wait...' : (isRegister ? 'Register' : 'Sign In')}
           </button>
         </form>
 
         {/* Toggle Mode */}
-        <div style={{ textAlign: 'center', marginTop: '18px' }}>
+        <div className="text-center mt-4">
           <button
             type="button"
             onClick={() => { setIsRegister(!isRegister); setError(''); }}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: 'var(--accent-cyan)',
-              fontSize: '0.85rem',
-              cursor: 'pointer',
-              textDecoration: 'underline'
-            }}
+            className="text-xs text-teal-400 hover:underline"
           >
-            {isRegister ? 'Already have an account? Sign in' : "Don't have an account? Create one"}
+            {isRegister ? 'Already have an account? Sign In' : "Don't have an account? Register"}
           </button>
         </div>
 

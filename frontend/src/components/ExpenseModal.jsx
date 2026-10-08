@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Check } from 'lucide-react';
+import { X } from 'lucide-react';
 
 export default function ExpenseModal({ isOpen, onClose, onSave, expenseToEdit }) {
   const [title, setTitle] = useState('');
@@ -62,77 +62,69 @@ export default function ExpenseModal({ isOpen, onClose, onSave, expenseToEdit })
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl relative">
         
-        {/* Modal Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0 }}>
+        {/* Header */}
+        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+          <h3 className="text-lg font-bold text-white">
             {expenseToEdit ? 'Edit Expense' : 'Add New Expense'}
           </h3>
           <button
             onClick={onClose}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: 'var(--text-muted)',
-              cursor: 'pointer',
-              padding: '4px'
-            }}
+            className="text-slate-400 hover:text-white p-1 rounded-lg"
           >
-            <X size={20} />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
         {error && (
-          <div style={{
-            background: 'rgba(244, 63, 94, 0.1)',
-            border: '1px solid rgba(244, 63, 94, 0.3)',
-            color: 'var(--accent-rose)',
-            padding: '10px 14px',
-            borderRadius: '8px',
-            fontSize: '0.85rem',
-            marginBottom: '16px'
-          }}>
+          <div className="mt-4 p-3 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-lg text-sm">
             {error}
           </div>
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label className="form-label">Description / Title</label>
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+          <div>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Description / Title
+            </label>
             <input
               type="text"
-              className="form-input"
-              placeholder="e.g. Whole Foods Market"
+              placeholder="e.g. Swiggy Food Delivery"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-500"
               required
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-            <div className="form-group">
-              <label className="form-label">Amount ($)</label>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Amount (₹)
+              </label>
               <input
                 type="number"
                 step="0.01"
                 min="0.01"
-                className="form-input"
-                placeholder="45.00"
+                placeholder="450.00"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
+                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-500"
                 required
               />
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Category</label>
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Category
+              </label>
               <select
-                className="form-select"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
+                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500 cursor-pointer"
               >
                 <option value="Food">Food</option>
                 <option value="Utilities">Utilities</option>
@@ -143,33 +135,45 @@ export default function ExpenseModal({ isOpen, onClose, onSave, expenseToEdit })
             </div>
           </div>
 
-          <div className="form-group">
-            <label className="form-label">Date</label>
+          <div>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Date
+            </label>
             <input
               type="date"
-              className="form-input"
               value={date}
               onChange={(e) => setDate(e.target.value)}
+              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500"
               required
             />
           </div>
 
-          <div className="form-group">
-            <label className="form-label">Notes (Optional)</label>
+          <div>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
+              Notes (Optional)
+            </label>
             <input
               type="text"
-              className="form-input"
-              placeholder="e.g. Business lunch or personal"
+              placeholder="e.g. Lunch with friends"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
+              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-500"
             />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px' }}>
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-sm font-semibold text-slate-400 hover:text-white rounded-lg transition-colors"
+            >
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="px-5 py-2 text-sm font-semibold bg-teal-500 hover:bg-teal-600 text-white rounded-lg transition-colors disabled:opacity-50"
+            >
               {isSubmitting ? 'Saving...' : (expenseToEdit ? 'Save Changes' : 'Add Expense')}
             </button>
           </div>

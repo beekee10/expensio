@@ -82,6 +82,6 @@ class DashboardSummary(BaseModel):
     total_spent: float
     monthly_spent: float
     transaction_count: int
-    monthly_budget: float = 2000.0  # Configurable target baseline
+    monthly_budget: float = 25000.0  # Default budget in Rupees (₹)
     budget_remaining: float
     categories: List[CategorySummary]

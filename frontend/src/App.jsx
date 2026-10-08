@@ -14,15 +14,16 @@ export default function App() {
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Filter state
+  // Search and Category filters
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
-  // Modals
+  // Modal open/close state
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
   const [expenseToEdit, setExpenseToEdit] = useState(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
+  // Fetch dashboard metrics and list of expenses
   const fetchDashboardData = useCallback(async () => {
     if (!authService.isAuthenticated()) {
       setSummary(null);
@@ -48,6 +49,7 @@ export default function App() {
     }
   }, [searchTerm, selectedCategory]);
 
+  // Listen for login/logout changes
   useEffect(() => {
     const handleAuthChange = () => {
       setUser(authService.getUser());
@@ -56,11 +58,12 @@ export default function App() {
     return () => window.removeEventListener('auth-changed', handleAuthChange);
   }, []);
 
+  // Reload data when filters or user changes
   useEffect(() => {
     fetchDashboardData();
   }, [fetchDashboardData, user]);
 
-  // Handle Create / Update Expense
+  // Create or Update Expense
   const handleSaveExpense = async (expenseData) => {
     if (expenseToEdit) {
       await expenseService.updateExpense(expenseToEdit.id, expenseData);
@@ -70,7 +73,7 @@ export default function App() {
     fetchDashboardData();
   };
 
-  // Handle Delete Expense
+  // Delete Expense
   const handleDeleteExpense = async (id) => {
     if (window.confirm('Are you sure you want to delete this expense?')) {
       try {
@@ -82,15 +85,15 @@ export default function App() {
     }
   };
 
-  // Auto-seed sample demo data for new accounts
+  // Pre-fill realistic Indian Rupee (₹) sample transactions for new accounts
   const handleSeedDemoData = async () => {
     const samples = [
-      { title: 'Whole Foods Market', amount: 115.30, category: 'Food', date: '2026-10-06', notes: 'Weekly groceries' },
-      { title: 'Electricity Bill', amount: 210.50, category: 'Utilities', date: '2026-10-05', notes: 'Monthly utility provider' },
-      { title: 'Movie Tickets & Snacks', amount: 45.00, category: 'Entertainment', date: '2026-10-04', notes: 'Weekend cinema' },
-      { title: 'Netflix & Spotify Premium', amount: 29.99, category: 'Subscriptions', date: '2026-10-03', notes: 'Digital entertainment' },
-      { title: 'Specialty Coffee', amount: 7.50, category: 'Food', date: '2026-10-02', notes: 'Morning roast' },
-      { title: 'Internet Fiber Connection', amount: 80.00, category: 'Utilities', date: '2026-10-01', notes: 'Gigabit fiber optic' }
+      { title: 'Swiggy Food Delivery', amount: 480.00, category: 'Food', date: '2026-10-06', notes: 'Dinner with friends' },
+      { title: 'Electricity & Water Bill', amount: 2450.00, category: 'Utilities', date: '2026-10-05', notes: 'Monthly utility bill' },
+      { title: 'PVR Cinema & Popcorn', amount: 850.00, category: 'Entertainment', date: '2026-10-04', notes: 'Weekend movie' },
+      { title: 'Netflix & Spotify Premium', amount: 699.00, category: 'Subscriptions', date: '2026-10-03', notes: 'Monthly streaming pack' },
+      { title: 'Chai & Snacks at Cafe', amount: 150.00, category: 'Food', date: '2026-10-02', notes: 'Evening tea break' },
+      { title: 'Airtel Broadband Wi-Fi', amount: 999.00, category: 'Utilities', date: '2026-10-01', notes: 'Fiber high-speed internet' }
     ];
 
     try {
@@ -104,9 +107,9 @@ export default function App() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
       
-      {/* Navigation */}
+      {/* 1. Header Navigation */}
       <Navbar
         user={user}
         onAddExpense={() => { setExpenseToEdit(null); setIsExpenseModalOpen(true); }}
@@ -114,89 +117,62 @@ export default function App() {
         onOpenAuth={() => setIsAuthModalOpen(true)}
       />
 
-      {/* Main Content */}
-      <main className="app-container" style={{ flex: 1, paddingBottom: '60px' }}>
+      {/* 2. Main Dashboard Content */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
         {!user ? (
           /* Unauthenticated Landing State */
-          <div style={{
-            textAlign: 'center',
-            padding: '100px 20px',
-            maxWidth: '680px',
-            margin: '0 auto'
-          }}>
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '6px 16px',
-              borderRadius: '20px',
-              background: 'rgba(6, 182, 212, 0.1)',
-              border: '1px solid rgba(6, 182, 212, 0.25)',
-              color: 'var(--accent-cyan)',
-              fontSize: '0.85rem',
-              fontWeight: 600,
-              marginBottom: '24px'
-            }}>
-              <Sparkles size={16} /> Python Developer Full-Stack Portfolio
+          <div className="max-w-2xl mx-auto text-center py-20">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-xs font-semibold mb-6">
+              <Sparkles className="w-4 h-4" /> Python Developer Full-Stack Project
             </div>
 
-            <h2 style={{ fontSize: '3rem', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.03em', marginBottom: '20px' }}>
-              High-Velocity Wealth &amp; <span style={{ color: 'var(--accent-cyan)' }}>Expense Analytics</span>
+            <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+              Personal Wealth &amp; <span className="text-teal-400">Expense Tracker</span>
             </h2>
 
-            <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '36px' }}>
-              An interview-grade full-stack architecture powered by <strong>FastAPI</strong>, <strong>SQLAlchemy 2.0</strong>, <strong>Alembic</strong>, and <strong>React</strong>. Engineered with strict Pydantic schemas and automated <code>pytest</code> coverage.
+            <p className="text-base text-slate-400 leading-relaxed mb-8">
+              A clean full-stack application built with <strong>FastAPI</strong>, <strong>SQLAlchemy</strong>, and <strong>React</strong> with Tailwind CSS. Includes JWT authentication, automated <code>pytest</code> tests, and server-side SQL analytics.
             </p>
 
             <button
-              className="btn btn-primary"
-              style={{ fontSize: '1.05rem', padding: '14px 32px' }}
               onClick={() => setIsAuthModalOpen(true)}
+              className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold text-base px-6 py-3 rounded-xl transition-colors shadow-lg shadow-teal-500/20"
             >
-              Explore Live Dashboard <ArrowRight size={18} />
+              Open Live Dashboard <ArrowRight className="w-5 h-5" />
             </button>
           </div>
         ) : (
           /* Authenticated Dashboard View */
           <>
-            {/* Quick Demo Seed Banner (if no transactions exist yet) */}
+            {/* Quick Demo Seed Banner for empty accounts */}
             {expenses.length === 0 && !loading && (
-              <div style={{
-                marginTop: '24px',
-                padding: '16px 20px',
-                borderRadius: 'var(--radius-md)',
-                background: 'rgba(99, 102, 241, 0.12)',
-                border: '1px solid rgba(99, 102, 241, 0.3)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                gap: '12px'
-              }}>
+              <div className="mb-6 p-4 rounded-xl bg-indigo-950/40 border border-indigo-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                  <strong style={{ color: '#c7d2fe' }}>Start with sample data:</strong>
-                  <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginLeft: '8px' }}>
-                    Populate 6 realistic financial transactions in 1 click to preview charts and metrics.
-                  </span>
+                  <p className="text-sm font-semibold text-indigo-300">
+                    Your account is empty!
+                  </p>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Click to load 6 realistic sample transactions in Rupees (₹) to preview your graphs.
+                  </p>
                 </div>
                 <button
-                  className="btn btn-secondary"
                   onClick={handleSeedDemoData}
-                  style={{ background: '#4f46e5', borderColor: '#6366f1', color: '#ffffff' }}
+                  className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors shrink-0"
                 >
-                  <Sparkles size={16} /> Load Sample Transactions
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Load Sample Transactions
                 </button>
               </div>
             )}
 
-            {/* 1. Top KPI Summary Cards */}
+            {/* Top KPI Summary Cards */}
             <StatsCards summary={summary} />
 
-            {/* 2. Middle Section: Category Breakdown & Savings Progress */}
+            {/* Category Breakdown & Budget Health */}
             <CategoryBreakdown categories={summary?.categories || []} summary={summary} />
 
-            {/* 3. Bottom Section: Searchable & Filterable Transactions Table */}
+            {/* Transactions Table with Search & Filter */}
             <TransactionTable
               expenses={expenses}
               searchTerm={searchTerm}
@@ -211,7 +187,7 @@ export default function App() {
 
       </main>
 
-      {/* Modals */}
+      {/* 3. Modals */}
       <ExpenseModal
         isOpen={isExpenseModalOpen}
         onClose={() => setIsExpenseModalOpen(false)}
@@ -225,20 +201,11 @@ export default function App() {
         onAuthSuccess={fetchDashboardData}
       />
 
-      {/* Footer */}
-      <footer style={{
-        borderTop: '1px solid var(--card-border)',
-        padding: '24px 0',
-        textAlign: 'center',
-        color: 'var(--text-muted)',
-        fontSize: '0.82rem',
-        background: 'rgba(11, 15, 25, 0.6)'
-      }}>
-        <div className="app-container">
-          <p>
-            Zenith Finance &bull; Full-Stack Python REST Engine &bull; Built with FastAPI, SQLAlchemy 2.0, Pydantic, SQLite/PostgreSQL &amp; React
-          </p>
-        </div>
+      {/* 4. Footer */}
+      <footer className="border-t border-slate-900 py-6 text-center text-xs text-slate-500">
+        <p>
+          Zenith Finance &bull; Python FastAPI &bull; SQLAlchemy &bull; React &bull; Tailwind CSS
+        </p>
       </footer>
 
     </div>

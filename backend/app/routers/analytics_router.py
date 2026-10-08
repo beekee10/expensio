@@ -53,7 +53,7 @@ def get_spending_by_category(
 
 @router.get("/dashboard", response_model=DashboardSummary)
 def get_dashboard_summary(
-    monthly_budget: float = 2000.0,
+    monthly_budget: float = 25000.0,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
