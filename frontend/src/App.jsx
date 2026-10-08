@@ -5,6 +5,7 @@ import CategoryBreakdown from './components/CategoryBreakdown';
 import TransactionTable from './components/TransactionTable';
 import ExpenseModal from './components/ExpenseModal';
 import AuthModal from './components/AuthModal';
+import DashboardPreview from './components/DashboardPreview';
 import { authService, expenseService } from './api';
 import { Sparkles, ArrowRight } from 'lucide-react';
 
@@ -122,25 +123,29 @@ export default function App() {
         
         {!user ? (
           /* Unauthenticated Landing State */
-          <div className="max-w-2xl mx-auto text-center py-20">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-xs font-semibold mb-6">
-              <Sparkles className="w-4 h-4" /> Python Developer Full-Stack Project
+          <div className="py-12 sm:py-16">
+            <div className="max-w-2xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-xs font-semibold mb-6">
+                <Sparkles className="w-4 h-4" /> Expensio
+              </div>
+
+              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+                Personal Wealth &amp; <span className="text-teal-400">Expense Tracker</span>
+              </h2>
+              <p className="text-base text-slate-400 leading-relaxed mb-8 max-w-xl mx-auto">
+                Track your everyday expenses, understand your spending habits,
+                and stay in control of your finances.
+              </p>
+              <button
+                onClick={() => setIsAuthModalOpen(true)}
+                className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold text-base px-6 py-3 rounded-xl transition-colors shadow-lg shadow-teal-500/20"
+              >
+                Start Tracking <ArrowRight className="w-5 h-5" />
+              </button>
             </div>
 
-            <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-6 leading-tight">
-              Personal Wealth &amp; <span className="text-teal-400">Expense Tracker</span>
-            </h2>
-
-            <p className="text-base text-slate-400 leading-relaxed mb-8">
-              A clean full-stack application built with <strong>FastAPI</strong>, <strong>SQLAlchemy</strong>, and <strong>React</strong> with Tailwind CSS. Includes JWT authentication, automated <code>pytest</code> tests, and server-side SQL analytics.
-            </p>
-
-            <button
-              onClick={() => setIsAuthModalOpen(true)}
-              className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold text-base px-6 py-3 rounded-xl transition-colors shadow-lg shadow-teal-500/20"
-            >
-              Open Live Dashboard <ArrowRight className="w-5 h-5" />
-            </button>
+            {/* Static Mini Dashboard Preview */}
+            <DashboardPreview />
           </div>
         ) : (
           /* Authenticated Dashboard View */

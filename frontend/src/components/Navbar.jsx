@@ -13,11 +13,8 @@ export default function Navbar({ user, onAddExpense, onLogout, onOpenAuth }) {
           </div>
           <div>
             <h1 className="text-xl font-bold tracking-tight text-white leading-none">
-              Zenith<span className="text-teal-400">Finance</span>
+              <span className="text-teal-400">Expensio</span>
             </h1>
-            <p className="text-xs text-slate-400 font-medium mt-1">
-              Python FastAPI &bull; SQLAlchemy &bull; React
-            </p>
           </div>
         </div>
 
@@ -57,7 +54,7 @@ export default function Navbar({ user, onAddExpense, onLogout, onOpenAuth }) {
               onClick={onOpenAuth}
               className="bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm px-5 py-2 rounded-lg transition-colors"
             >
-              Sign In / Register
+              Login
             </button>
           )}
         </div>
