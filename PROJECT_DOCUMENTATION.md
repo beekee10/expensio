@@ -118,6 +118,7 @@ Stores registered user accounts and encrypted passwords.
 | `email` | String(255) | Unique, Indexed, Not Null | User's login email (stored lowercase) |
 | `full_name` | String(255) | Nullable | Optional display name (e.g. "Rahul Sharma") |
 | `hashed_password` | String(255) | Not Null | Bcrypt salted hash (plaintext password never saved) |
+| `monthly_budget` | Float | Not Null, Default 25000.0 | User's customizable personal monthly spending limit in ₹ |
 | `created_at` | DateTime | Not Null, Default UTC | Account creation timestamp |
 
 ### 2. `expenses` Table
@@ -392,6 +393,7 @@ All routes are prefixed with `/api`.
 | `POST` | `/api/auth/register` | Register new user account | No | `{"email", "password", "full_name"}` | 201 |
 | `POST` | `/api/auth/login` | Authenticate user & get token | No | `{"email", "password"}` | 200 |
 | `GET` | `/api/auth/me` | Fetch active user profile | Yes (JWT) | None | 200 |
+| `PUT` | `/api/auth/budget` | Update user's personal monthly limit | Yes (JWT) | `{"monthly_budget": 35000.0}` | 200 |
 | `POST` | `/api/expenses` | Create a new expense | Yes (JWT) | `{"title", "amount", "category", "date", "notes"}` | 201 |
 | `GET` | `/api/expenses` | List user expenses | Yes (JWT) | `?category=...&search=...&skip=0&limit=50` | 200 |
 | `GET` | `/api/expenses/{id}` | Get single expense | Yes (JWT) | None | 200 / 404 |
