@@ -123,29 +123,36 @@ export default function App() {
         
         {!user ? (
           /* Unauthenticated Landing State */
-          <div className="py-12 sm:py-16">
-            <div className="max-w-2xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-xs font-semibold mb-6">
-                <Sparkles className="w-4 h-4" /> Expensio
+          <div className="py-10 sm:py-16 lg:py-24">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-14 items-center">
+              
+              {/* Left Column: Hero Text & Action */}
+              <div className="text-left">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-xs font-semibold mb-6">
+                  <Sparkles className="w-4 h-4" /> Expensio
+                </div>
+
+                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+                  Personal Wealth &amp; <span className="text-teal-400">Expense Tracker</span>
+                </h2>
+                <p className="text-base sm:text-lg text-slate-400 leading-relaxed mb-8 max-w-lg">
+                  Track your everyday expenses, understand your spending habits,
+                  and stay in control of your finances.
+                </p>
+                <button
+                  onClick={() => setIsAuthModalOpen(true)}
+                  className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold text-base px-6 py-3.5 rounded-xl transition-colors shadow-lg shadow-teal-500/20"
+                >
+                  Start Tracking <ArrowRight className="w-5 h-5" />
+                </button>
               </div>
 
-              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-6 leading-tight">
-                Personal Wealth &amp; <span className="text-teal-400">Expense Tracker</span>
-              </h2>
-              <p className="text-base text-slate-400 leading-relaxed mb-8 max-w-xl mx-auto">
-                Track your everyday expenses, understand your spending habits,
-                and stay in control of your finances.
-              </p>
-              <button
-                onClick={() => setIsAuthModalOpen(true)}
-                className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold text-base px-6 py-3 rounded-xl transition-colors shadow-lg shadow-teal-500/20"
-              >
-                Start Tracking <ArrowRight className="w-5 h-5" />
-              </button>
-            </div>
+              {/* Right Column: Sideways 3D Tilted Card */}
+              <div className="w-full">
+                <DashboardPreview />
+              </div>
 
-            {/* Static Mini Dashboard Preview */}
-            <DashboardPreview />
+            </div>
           </div>
         ) : (
           /* Authenticated Dashboard View */

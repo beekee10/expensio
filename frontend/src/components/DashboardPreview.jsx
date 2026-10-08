@@ -3,12 +3,12 @@ import { TrendingDown } from 'lucide-react';
 
 export default function DashboardPreview() {
   return (
-    <div className="relative max-w-2xl mx-auto mt-12 text-left">
+    <div className="relative w-full max-w-lg mx-auto lg:max-w-none transition-all duration-500 ease-out lg:[transform:perspective(1200px)_rotateY(-8deg)_rotateX(4deg)] hover:lg:[transform:perspective(1200px)_rotateY(0deg)_rotateX(0deg)]">
       {/* Subtle ambient glow behind card */}
-      <div className="absolute -inset-1 bg-gradient-to-r from-teal-500/20 via-indigo-500/15 to-teal-500/20 rounded-3xl blur-xl opacity-60 pointer-events-none" />
+      <div className="absolute -inset-1.5 bg-gradient-to-r from-teal-500/25 via-indigo-500/20 to-teal-500/25 rounded-3xl blur-2xl opacity-70 pointer-events-none" />
 
       {/* Translucent Frosted Glass Card */}
-      <div className="relative rounded-2xl border border-slate-700/40 bg-slate-900/40 backdrop-blur-xl p-5 sm:p-6 shadow-2xl shadow-black/40">
+      <div className="relative rounded-2xl border border-slate-700/50 bg-slate-900/50 backdrop-blur-xl p-5 sm:p-6 shadow-2xl shadow-black/50">
         
         {/* Top bar: live indicator & trend pill */}
         <div className="flex items-center justify-between pb-3.5 border-b border-slate-800/60">
