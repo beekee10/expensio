@@ -1,131 +1,117 @@
 import React from 'react';
-import {
-  TrendingDown,
-  Wallet,
-  Utensils,
-  ShoppingBag
-} from 'lucide-react';
+import { TrendingDown } from 'lucide-react';
 
 export default function DashboardPreview() {
   return (
-    <div className="mt-14 max-w-4xl mx-auto text-left">
-      {/* Label */}
-      <div className="text-center mb-3">
-        <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-          Your finances at a glance
-        </span>
-      </div>
+    <div className="relative max-w-2xl mx-auto mt-12 text-left">
+      {/* Subtle ambient glow behind card */}
+      <div className="absolute -inset-1 bg-gradient-to-r from-teal-500/20 via-indigo-500/15 to-teal-500/20 rounded-3xl blur-xl opacity-60 pointer-events-none" />
 
-      {/* Main Preview Container */}
-      <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 sm:p-6 shadow-2xl shadow-black/30">
+      {/* Translucent Frosted Glass Card */}
+      <div className="relative rounded-2xl border border-slate-700/40 bg-slate-900/40 backdrop-blur-xl p-5 sm:p-6 shadow-2xl shadow-black/40">
         
-        {/* Header: Period & Trend */}
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-5 pb-4 border-b border-slate-800/60">
+        {/* Top bar: live indicator & trend pill */}
+        <div className="flex items-center justify-between pb-3.5 border-b border-slate-800/60">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
+            <span className="text-xs font-semibold text-slate-300 tracking-wide uppercase">
+              October Overview
+            </span>
+          </div>
+
+          <div className="inline-flex items-center gap-1 text-[11px] font-medium text-teal-400 bg-teal-500/10 border border-teal-500/20 px-2.5 py-0.5 rounded-full">
+            <TrendingDown className="w-3 h-3" />
+            <span>8.4% under budget</span>
+          </div>
+        </div>
+
+        {/* Primary metric summary */}
+        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 py-4">
           <div>
-            <p className="text-xs font-medium text-slate-500">October 2026</p>
-            <h3 className="text-lg font-bold text-white">Spending Overview</h3>
+            <span className="text-xs text-slate-400">Total Spent</span>
+            <div className="text-3xl font-extrabold text-white tracking-tight mt-0.5">
+              ₹24,850{' '}
+              <span className="text-xs font-normal text-slate-500">
+                / ₹40,000 budget
+              </span>
+            </div>
           </div>
 
-          <div className="inline-flex items-center gap-1.5 text-xs font-medium text-teal-400 bg-teal-500/10 px-2.5 py-1 rounded-full border border-teal-500/20">
-            <TrendingDown className="w-3.5 h-3.5" />
-            <span>8.4% less than last month</span>
+          <div className="flex items-center gap-4 text-xs text-slate-400">
+            <div>
+              <span className="block text-[11px] text-slate-500">Remaining</span>
+              <span className="font-semibold text-emerald-400">₹15,150</span>
+            </div>
+            <div className="w-px h-6 bg-slate-800" />
+            <div>
+              <span className="block text-[11px] text-slate-500">Top Spend</span>
+              <span className="font-semibold text-slate-200">Food &bull; ₹6,250</span>
+            </div>
           </div>
         </div>
 
-        {/* 3 Metric Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-          <div className="rounded-xl bg-slate-950/70 border border-slate-800 p-4">
-            <div className="flex items-center gap-2 text-slate-500 text-xs mb-1.5">
-              <Wallet className="w-3.5 h-3.5" />
-              <span>Total Spent</span>
-            </div>
-            <p className="text-xl font-bold text-white">₹24,850</p>
-          </div>
-
-          <div className="rounded-xl bg-slate-950/70 border border-slate-800 p-4">
-            <div className="flex items-center gap-2 text-slate-500 text-xs mb-1.5">
-              <Utensils className="w-3.5 h-3.5" />
-              <span>Top Category</span>
-            </div>
-            <p className="text-xl font-bold text-white">Food</p>
-          </div>
-
-          <div className="rounded-xl bg-slate-950/70 border border-slate-800 p-4">
-            <div className="flex items-center gap-2 text-slate-500 text-xs mb-1.5">
-              <ShoppingBag className="w-3.5 h-3.5" />
-              <span>Remaining</span>
-            </div>
-            <p className="text-xl font-bold text-white">₹15,150</p>
-          </div>
-        </div>
-
-        {/* Lower Row: Bar Chart & Category Progress */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Mini translucent visual previews */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-3.5 border-t border-slate-800/60">
           
-          {/* Monthly Spending Comparison */}
-          <div className="rounded-xl bg-slate-950/70 border border-slate-800 p-4 flex flex-col justify-between">
-            <p className="text-sm font-semibold text-white mb-3">
-              Monthly Spending
-            </p>
-
-            <div className="flex items-end justify-between h-28 gap-3 px-1 pt-2">
+          {/* Weekly activity bars */}
+          <div className="bg-slate-950/40 border border-slate-800/50 rounded-xl p-3.5">
+            <span className="text-[11px] font-medium text-slate-400 block mb-2">
+              Weekly Trend
+            </span>
+            <div className="flex items-end justify-between h-14 gap-2 px-1">
               {[
-                { month: 'Jun', height: '45%' },
-                { month: 'Jul', height: '65%' },
-                { month: 'Aug', height: '52%' },
-                { month: 'Sep', height: '78%' },
-                { month: 'Oct', height: '58%' },
-              ].map((item) => (
-                <div
-                  key={item.month}
-                  className="flex-1 h-full flex flex-col justify-end items-center gap-2"
-                >
+                { label: 'W1', height: '40%' },
+                { label: 'W2', height: '65%' },
+                { label: 'W3', height: '48%' },
+                { label: 'W4', height: '82%' },
+                { label: 'W5', height: '54%' },
+              ].map((bar) => (
+                <div key={bar.label} className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
                   <div
-                    className="w-full max-w-8 rounded-t bg-teal-500/80 transition-all duration-300"
-                    style={{ height: item.height }}
+                    className="w-full rounded-sm bg-gradient-to-t from-teal-500/40 to-teal-400"
+                    style={{ height: bar.height }}
                   />
-                  <span className="text-[11px] text-slate-500 font-medium">
-                    {item.month}
+                  <span className="text-[9px] text-slate-500 font-medium">
+                    {bar.label}
                   </span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Top Categories */}
-          <div className="rounded-xl bg-slate-950/70 border border-slate-800 p-4">
-            <p className="text-sm font-semibold text-white mb-3">
+          {/* Category breakdown pills */}
+          <div className="bg-slate-950/40 border border-slate-800/50 rounded-xl p-3.5 flex flex-col justify-between">
+            <span className="text-[11px] font-medium text-slate-400 block mb-1">
               Top Categories
-            </p>
-
-            <div className="space-y-3.5">
+            </span>
+            <div className="space-y-2">
               <div>
-                <div className="flex justify-between text-xs mb-1">
-                  <span className="text-slate-400 font-medium">Food</span>
-                  <span className="text-slate-200 font-semibold">₹6,250</span>
+                <div className="flex justify-between text-[11px] mb-1">
+                  <span className="text-slate-300">Food &amp; Dining</span>
+                  <span className="text-slate-400 font-medium">₹6,250</span>
                 </div>
-                <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                  <div className="h-full w-[75%] bg-teal-500 rounded-full" />
+                <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-teal-400 rounded-full w-[65%]" />
                 </div>
               </div>
 
               <div>
-                <div className="flex justify-between text-xs mb-1">
-                  <span className="text-slate-400 font-medium">Utilities</span>
-                  <span className="text-slate-200 font-semibold">₹4,200</span>
+                <div className="flex justify-between text-[11px] mb-1">
+                  <span className="text-slate-300">Utilities</span>
+                  <span className="text-slate-400 font-medium">₹4,200</span>
                 </div>
-                <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                  <div className="h-full w-[52%] bg-teal-500 rounded-full" />
+                <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-indigo-400 rounded-full w-[44%]" />
                 </div>
               </div>
 
               <div>
-                <div className="flex justify-between text-xs mb-1">
-                  <span className="text-slate-400 font-medium">Entertainment</span>
-                  <span className="text-slate-200 font-semibold">₹3,150</span>
+                <div className="flex justify-between text-[11px] mb-1">
+                  <span className="text-slate-300">Entertainment</span>
+                  <span className="text-slate-400 font-medium">₹3,150</span>
                 </div>
-                <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                  <div className="h-full w-[39%] bg-teal-500 rounded-full" />
+                <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-purple-400 rounded-full w-[33%]" />
                 </div>
               </div>
             </div>
