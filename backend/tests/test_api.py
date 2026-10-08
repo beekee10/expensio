@@ -112,3 +112,20 @@ def test_expense_filtering_and_analytics(client, auth_headers):
     dash_data = dash_res.json()
     assert dash_data["total_spent"] == 150.0
     assert dash_data["transaction_count"] == 3
+
+
+def test_user_custom_monthly_budget(client, auth_headers):
+    # 1. Update personal monthly budget to 45000
+    res = client.put("/api/auth/budget", json={"monthly_budget": 45000.0}, headers=auth_headers)
+    assert res.status_code == 200
+    assert res.json()["monthly_budget"] == 45000.0
+
+    # 2. Add an expense of 5000
+    client.post("/api/expenses", json={"title": "Rent", "amount": 5000.0, "category": "Utilities"}, headers=auth_headers)
+
+    # 3. Check dashboard reflects custom budget (45000 - 5000 = 40000 remaining)
+    dash = client.get("/api/analytics/dashboard", headers=auth_headers)
+    assert dash.status_code == 200
+    data = dash.json()
+    assert data["monthly_budget"] == 45000.0
+    assert data["budget_remaining"] == 40000.0

@@ -53,12 +53,12 @@ def get_spending_by_category(
 
 @router.get("/dashboard", response_model=DashboardSummary)
 def get_dashboard_summary(
-    monthly_budget: float = 25000.0,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    """Fetch high-level KPI metrics for top-level dashboard display."""
+    """Fetch high-level KPI metrics for top-level dashboard display using user's personal budget limit."""
     today = date.today()
+    user_budget = getattr(current_user, "monthly_budget", 25000.0) or 25000.0
 
     # All-time total spent
     total_spent = db.query(func.coalesce(func.sum(Expense.amount), 0.0)).filter(
@@ -81,13 +81,13 @@ def get_dashboard_summary(
     categories = get_spending_by_category(db=db, current_user=current_user)
 
     monthly_spent_val = round(float(monthly_spent), 2)
-    budget_remaining = round(max(0.0, monthly_budget - monthly_spent_val), 2)
+    budget_remaining = round(max(0.0, user_budget - monthly_spent_val), 2)
 
     return DashboardSummary(
         total_spent=round(float(total_spent), 2),
         monthly_spent=monthly_spent_val,
         transaction_count=tx_count,
-        monthly_budget=monthly_budget,
+        monthly_budget=user_budget,
         budget_remaining=budget_remaining,
         categories=categories
     )

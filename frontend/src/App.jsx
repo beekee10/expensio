@@ -86,6 +86,16 @@ export default function App() {
     }
   };
 
+  // Update user's personal monthly budget limit
+  const handleUpdateBudget = async (newBudget) => {
+    try {
+      await authService.updateBudget(newBudget);
+      fetchDashboardData();
+    } catch (err) {
+      alert('Failed to update monthly budget: ' + (err.response?.data?.detail || err.message));
+    }
+  };
+
   // Pre-fill realistic Indian Rupee (₹) sample transactions for new accounts
   const handleSeedDemoData = async () => {
     const samples = [
@@ -179,7 +189,7 @@ export default function App() {
             )}
 
             {/* Top KPI Summary Cards */}
-            <StatsCards summary={summary} />
+            <StatsCards summary={summary} onUpdateBudget={handleUpdateBudget} />
 
             {/* Category Breakdown & Budget Health */}
             <CategoryBreakdown categories={summary?.categories || []} summary={summary} />

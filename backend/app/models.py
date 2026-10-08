@@ -15,6 +15,7 @@ class User(Base):
     email = Column(String(255), unique=True, index=True, nullable=False)
     full_name = Column(String(255), nullable=True)
     hashed_password = Column(String(255), nullable=False)
+    monthly_budget = Column(Float, default=25000.0, nullable=False)
     created_at = Column(DateTime, default=get_utc_now, nullable=False)
 
     # Relationships

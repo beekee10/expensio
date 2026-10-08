@@ -54,6 +54,14 @@ export const authService = {
     window.dispatchEvent(new Event('auth-changed'));
   },
 
+  updateBudget: async (monthly_budget) => {
+    const res = await api.put('/api/auth/budget', { monthly_budget: parseFloat(monthly_budget) });
+    const existingUser = authService.getUser() || {};
+    localStorage.setItem('zenith_user', JSON.stringify({ ...existingUser, ...res.data }));
+    window.dispatchEvent(new Event('auth-changed'));
+    return res.data;
+  },
+
   getUser: () => {
     try {
       const user = localStorage.getItem('zenith_user');

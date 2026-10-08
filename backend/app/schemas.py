@@ -21,9 +21,14 @@ class UserLogin(BaseModel):
 
 class UserResponse(UserBase):
     id: int
+    monthly_budget: float = 25000.0
     created_at: dt_datetime
 
     model_config = {"from_attributes": True}
+
+
+class BudgetUpdate(BaseModel):
+    monthly_budget: float = Field(..., gt=0, description="Monthly budget limit in Rupees")
 
 
 # ===================== AUTH TOKEN SCHEMAS =====================
