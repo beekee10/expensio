@@ -1,6 +1,6 @@
-# Zenith Finance — Complete Project Documentation & Technical Guide
+# Expensio — Complete Project Documentation & Technical Guide
 
-Welcome to the comprehensive technical documentation for **Zenith Finance**, a production-ready, beginner-friendly full-stack Personal Finance and Expense Analytics application. 
+Welcome to the comprehensive technical documentation for **Expensio**, a production-ready, beginner-friendly full-stack Personal Finance and Expense Analytics application. 
 
 This document details the **entire project architecture**, **technology stack**, **database design**, **file-by-file functionality**, and **interview preparation guide**.
 
@@ -17,14 +17,13 @@ This document details the **entire project architecture**, **technology stack**,
    - [Configuration & DevOps Files](#c-configuration--devops-files)
 6. [API Endpoints Reference](#6-api-endpoints-reference)
 7. [How to Run & Test the Application](#7-how-to-run--test-the-application)
-8. [Interview Walkthrough & Key Talking Points](#8-interview-walkthrough--key-talking-points)
 
 ---
 
 ## 1. Project Overview
 
-### What is Zenith Finance?
-Zenith Finance is a modern full-stack web application that allows users to securely track personal income and expenses, monitor monthly budget health, categorize transactions, and view real-time analytical breakdowns in **Indian Rupees (₹)**.
+### What is Expensio?
+Expensio is a modern full-stack web application that allows users to securely track personal income and expenses, monitor monthly budget health, categorize transactions, and view real-time analytical breakdowns in **Indian Rupees (₹)**.
 
 ### Why Was It Built?
 As a developer transitioning from the **MERN (MongoDB, Express, React, Node.js)** stack to **Python Backend / Full-Stack**, this project was engineered to demonstrate:
@@ -433,31 +432,3 @@ npm run dev
 * **Web Dashboard**: Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ---
-
-## 8. Interview Walkthrough & Key Talking Points
-
-Use this section to confidently answer technical interview questions when presenting this project:
-
-### The 60-Second Elevator Pitch:
-> *"I built **Zenith Finance**, a full-stack personal finance and expense analytics platform. The backend is built using **FastAPI** and **SQLAlchemy 2.0** with **OAuth2 JWT Bearer authentication** and **Bcrypt password hashing**. I used **Alembic** for tracked database migrations and wrote automated integration tests with **Pytest** using an in-memory SQLite database. The frontend is built with **React** and **Tailwind CSS v4**, featuring real-time KPI metrics in Indian Rupees and category aggregations pushed down to the database engine via SQL `GROUP BY` queries."*
-
-### Top 5 Interview Questions & How to Answer Them:
-
-#### Q1: "Why did you choose FastAPI over Flask or Django?"
-* **Answer**: *"FastAPI offers modern async/await support, automatic OpenAPI/Swagger documentation generation, and native integration with Pydantic for data validation. Coming from Node/Express, FastAPI feels very modern, highly typed, and allows building clean microservices with minimal boilerplate compared to Django's heavy framework."*
-
-#### Q2: "How does SQLAlchemy compare to Mongoose in MongoDB?"
-* **Answer**: *"In Mongoose, data is schemaless and stored as JSON documents. In SQLAlchemy, data is normalized across relational SQL tables with strict column types, primary keys, foreign key constraints, and cascading deletes. SQLAlchemy 2.0 provides an explicit mapping between Python classes and database tables, allowing us to perform efficient SQL joins, aggregations, and migrations using Alembic."*
-
-#### Q3: "How does your route protection work?"
-* **Answer**: *"FastAPI uses a Dependency Injection system. I defined a `get_current_user` dependency that uses `OAuth2PasswordBearer`. When a protected route is requested, FastAPI extracts the Bearer token from the `Authorization` header, decodes and verifies the JWT signature, and fetches the user from the database. If the token is missing, expired, or invalid, it immediately halts execution and returns a 401 Unauthorized response."*
-
-#### Q4: "How does the Category Analytics endpoint calculate percentages?"
-* **Answer**: *"Rather than fetching all transactions into Python and doing slow array filtering in application memory, I designed a server-side SQL aggregation query using SQLAlchemy's `func.sum()` and `group_by(Expense.category)`. The database engine computes the totals directly, resulting in sub-millisecond response times even as data scales."*
-
-#### Q5: "How do your tests work?"
-* **Answer**: *"I used Pytest with FastAPI's `TestClient`. In `conftest.py`, I created an isolated in-memory SQLite database (`sqlite:///:memory:`) and used FastAPI's `app.dependency_overrides[get_db]` to swap the database connection. This ensures tests run in isolation without modifying the development database, running all 7 test cases in under 3 seconds."*
-
----
-
-*Documentation generated for Zenith Finance. Repository root: `c:\Users\absin\Desktop\pyt`.*
