@@ -37,9 +37,9 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
     setLoading(true);
     try {
       try {
-        await authService.login('demo@zenith.com', 'password123');
+        await authService.login('demo@expensio.com', 'password123');
       } catch {
-        await authService.register('demo@zenith.com', 'password123', 'Demo Interviewer');
+        await authService.register('demo@expensio.com', 'password123', 'Demo Interviewer');
       }
       onAuthSuccess();
       onClose();

@@ -5,15 +5,17 @@ from app.config import settings
 # 1. Database Connection Setup
 # SQLite requires check_same_thread=False; PostgreSQL does not need it.
 connect_args = {}
+engine_kwargs = {}
+
 if settings.DATABASE_URL.startswith("sqlite"):
     connect_args["check_same_thread"] = False
-
-database_url = settings.DATABASE_URL
-if database_url.startswith("postgres://"):
-    database_url = database_url.replace("postgres://", "postgresql://", 1)
+else:
+    # Recommended settings for cloud-hosted PostgreSQL (Neon, Supabase)
+    engine_kwargs["pool_pre_ping"] = True
+    engine_kwargs["pool_recycle"] = 300
 
 # 2. Create the Database Engine
-engine = create_engine(database_url, connect_args=connect_args)
+engine = create_engine(settings.sync_database_url, connect_args=connect_args, **engine_kwargs)
 
 # 3. Create Session Factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

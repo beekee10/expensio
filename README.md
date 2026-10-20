@@ -109,5 +109,28 @@ npm run dev
 
 ---
 
+<<<<<<< HEAD
 
 
+=======
+## ☁️ Free Deployment Guide
+
+For a complete click-by-click walkthrough with screenshots and environment variable tables, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
+### Quick Summary
+
+1. **Database (Neon.tech):** Create a free serverless PostgreSQL instance and copy the connection URI.
+2. **Backend (Render.com):** Create a Web Service with Root Directory `backend`, start command `uvicorn app.main:app --host 0.0.0.0 --port $PORT`, and configure `DATABASE_URL` and `SECRET_KEY`.
+3. **Frontend (Vercel):** Import the repository, set Root Directory to `frontend`, configure `VITE_API_URL` to point to your Render backend, and deploy.
+
+---
+
+## 💡 Key Python Interview Topics Demonstrated in This Codebase
+
+1. **Dependency Injection (FastAPI Depends):** How `get_db` manages database sessions and `get_current_user` verifies JWT tokens.
+2. **Pydantic v2 vs SQLAlchemy Models:** Separation between database persistence and data validation and serialization.
+3. **Database Aggregations:** Using SQLAlchemy `func.sum()` and `group_by()` to aggregate data in the database.
+4. **Database Migrations with Alembic:** Version-controlled schema migrations using `alembic revision --autogenerate` and `alembic upgrade head`.
+5. **Testing with Pytest:** Using an isolated in-memory SQLite database and FastAPI dependency overrides to test without affecting production data.
+
+>>>>>>> 61029ef (deployment commit)

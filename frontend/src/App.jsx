@@ -226,7 +226,7 @@ export default function App() {
       {/* 4. Footer */}
       <footer className="border-t border-slate-900 py-6 text-center text-xs text-slate-500">
         <p>
-          Zenith Finance &bull; Python FastAPI &bull; SQLAlchemy &bull; React &bull; Tailwind CSS
+          Expensio &bull; Python FastAPI &bull; SQLAlchemy &bull; React &bull; Tailwind CSS
         </p>
       </footer>
 

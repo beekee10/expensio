@@ -26,18 +26,28 @@ app = FastAPI(
 )
 
 # CORS configuration
-origins = settings.cors_origins
-if not origins or "*" not in origins:
-    # Ensure standard frontend dev ports are explicitly supported
-    origins.extend(["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000"])
+cors_origins = list(settings.cors_origins)
+for dev_origin in ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000"]:
+    if dev_origin not in cors_origins:
+        cors_origins.append(dev_origin)
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins for seamless development & deployment
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+if "*" in cors_origins:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=False,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+else:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=cors_origins,
+        allow_origin_regex=r"https://.*\.vercel\.app",
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 # Register API Routers
 app.include_router(auth_router)

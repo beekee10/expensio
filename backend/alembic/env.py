@@ -19,7 +19,7 @@ from app.models import User, Expense  # noqa: F401
 from app.config import settings
 
 target_metadata = Base.metadata
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+config.set_main_option("sqlalchemy.url", settings.sync_database_url)
 
 
 def run_migrations_offline() -> None:

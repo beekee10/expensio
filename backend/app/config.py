@@ -2,9 +2,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "Zenith Finance API"
+    PROJECT_NAME: str = "Expensio API"
     DATABASE_URL: str = "sqlite:///./expenses.db"
-    SECRET_KEY: str = "supersecretjwtkey_change_in_production_zenith_finance"
+    SECRET_KEY: str = "supersecretjwtkey_change_in_production_expensio"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
     ALLOWED_ORIGINS: str = "http://localhost:5173,http://localhost:3000"
@@ -18,6 +18,13 @@ class Settings(BaseSettings):
     @property
     def cors_origins(self) -> list[str]:
         return [origin.strip() for origin in self.ALLOWED_ORIGINS.split(",") if origin.strip()]
+
+    @property
+    def sync_database_url(self) -> str:
+        url = self.DATABASE_URL
+        if url.startswith("postgres://"):
+            url = url.replace("postgres://", "postgresql://", 1)
+        return url
 
 
 settings = Settings()

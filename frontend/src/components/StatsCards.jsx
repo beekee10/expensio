@@ -77,76 +77,183 @@ export default function StatsCards({ summary, onUpdateBudget }) {
             {budgetPercentage}% of limit
           </span>
 
-          {/* User's Custom Budget Target Display & Editor */}
-          {!isEditingBudget ? (
-            <div className="flex items-center gap-1.5 text-slate-400">
-              <span>Limit: <strong className="text-slate-200">₹{monthlyBudget.toLocaleString('en-IN')}</strong></span>
-              {onUpdateBudget && (
-                <button
-                  type="button"
-                  onClick={() => { setBudgetInput(monthlyBudget.toString()); setIsEditingBudget(true); }}
-                  title="Change your monthly limit"
-                  className="p-1 text-slate-400 hover:text-teal-400 rounded transition-colors"
-                >
-                  <Edit2 className="w-3.5 h-3.5" />
-                </button>
-              )}
-            </div>
-          ) : (
-            <form onSubmit={handleSaveBudget} className="flex items-center gap-1">
-              <span className="text-slate-400 font-medium">₹</span>
-              <input
-                type="number"
-                min="100"
-                step="100"
-                value={budgetInput}
-                onChange={(e) => setBudgetInput(e.target.value)}
-                className="w-24 bg-slate-800 border border-teal-500 rounded px-1.5 py-0.5 text-xs text-white focus:outline-none"
-                autoFocus
-              />
-              <button
-                type="submit"
-                disabled={isSaving}
-                title="Save limit"
-                className="p-1 text-teal-400 hover:text-teal-300 transition-colors"
-              >
-                <Check className="w-3.5 h-3.5" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsEditingBudget(false)}
-                title="Cancel"
-                className="p-1 text-slate-500 hover:text-rose-400 transition-colors"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </form>
-          )}
+          
         </div>
       </div>
 
-      {/* 3. Remaining Budget */}
-      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-lg backdrop-blur-sm">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-slate-400">Remaining Budget</p>
-            <h2 className={`text-3xl font-extrabold mt-2 ${
-              budgetRemaining < 5000 ? 'text-rose-400' : 'text-emerald-400'
-            }`}>
-              ₹{budgetRemaining.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </h2>
-          </div>
-          <div className="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl">
-            <PiggyBank className="w-6 h-6" />
-          </div>
+    
+{/* 3. Remaining Budget */}
+<div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-lg backdrop-blur-sm">
+  
+  {/* Header */}
+  <div className="flex items-start justify-between">
+    <div>
+      <p className="text-sm font-medium text-slate-400">
+        Remaining Budget
+      </p>
+
+      <h2 className={`text-3xl font-extrabold mt-2 ${
+        budgetRemaining < 5000
+          ? 'text-rose-400'
+          : 'text-emerald-400'
+      }`}>
+        ₹{budgetRemaining.toLocaleString('en-IN', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        })}
+      </h2>
+    </div>
+
+    <div className="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl">
+      <PiggyBank className="w-6 h-6" />
+    </div>
+  </div>
+
+
+  {/* Budget Progress */}
+  <div className="mt-6">
+
+    <div className="flex items-center justify-between mb-2">
+      <span className="text-xs text-slate-500">
+        Budget used
+      </span>
+
+      <span className={`text-xs font-semibold ${
+        budgetPercentage > 85
+          ? 'text-rose-400'
+          : 'text-slate-300'
+      }`}>
+        {budgetPercentage}%
+      </span>
+    </div>
+
+    <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+      <div
+        className={`h-full rounded-full transition-all duration-500 ${
+          budgetPercentage > 85
+            ? 'bg-rose-400'
+            : budgetPercentage > 70
+              ? 'bg-amber-400'
+              : 'bg-emerald-400'
+        }`}
+        style={{ width: `${budgetPercentage}%` }}
+      />
+    </div>
+
+  </div>
+
+
+  {/* Budget Limit */}
+  <div className="mt-5 pt-4 border-t border-slate-800">
+
+    {!isEditingBudget ? (
+
+      <div className="flex items-center justify-between">
+
+        <div>
+          <p className="text-xs text-slate-500">
+            Monthly limit
+          </p>
+
+          <p className="text-sm font-semibold text-slate-200 mt-0.5">
+            ₹{monthlyBudget.toLocaleString('en-IN')}
+          </p>
         </div>
-        <div className="flex items-center gap-2 mt-4 text-xs text-slate-400">
-          <span className="text-slate-300 bg-slate-800 px-2 py-0.5 rounded-full font-semibold">
-            Safe to spend
-          </span>
-          <span>Based on your custom limit</span>
-        </div>
+
+        {onUpdateBudget && (
+          <button
+            type="button"
+            onClick={() => {
+              setBudgetInput(monthlyBudget.toString());
+              setIsEditingBudget(true);
+            }}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg
+                       text-xs font-medium text-slate-400
+                       bg-slate-800 hover:bg-slate-700
+                       hover:text-teal-400
+                       border border-slate-700
+                       transition-all"
+          >
+            <Edit2 className="w-3.5 h-3.5" />
+            Edit
+          </button>
+        )}
+
       </div>
+
+    ) : (
+
+      <form
+        onSubmit={handleSaveBudget}
+        className="flex items-center justify-between gap-3"
+      >
+
+        <div>
+          <p className="text-xs text-slate-500 mb-1">
+            Monthly limit
+          </p>
+
+          <div className="flex items-center">
+            <span className="text-sm text-slate-400 mr-1">
+              ₹
+            </span>
+
+            <input
+              type="number"
+              min="100"
+              step="100"
+              value={budgetInput}
+              onChange={(e) => setBudgetInput(e.target.value)}
+              className="w-28 bg-slate-800 border border-teal-500
+                         rounded-lg px-2.5 py-1.5
+                         text-sm text-white
+                         focus:outline-none focus:ring-1
+                         focus:ring-teal-500"
+              autoFocus
+            />
+          </div>
+        </div>
+
+
+        <div className="flex items-center gap-1">
+
+          <button
+            type="submit"
+            disabled={isSaving}
+            title="Save limit"
+            className="p-2 rounded-lg
+                       text-teal-400
+                       bg-teal-500/10
+                       hover:bg-teal-500/20
+                       transition-colors"
+          >
+            <Check className="w-4 h-4" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsEditingBudget(false)}
+            title="Cancel"
+            className="p-2 rounded-lg
+                       text-slate-400
+                       bg-slate-800
+                       hover:text-rose-400
+                       hover:bg-slate-700
+                       transition-colors"
+          >
+            <X className="w-4 h-4" />
+          </button>
+
+        </div>
+
+      </form>
+
+    )}
+
+  </div>
+
+</div>  
+      
 
     </div>
   );
